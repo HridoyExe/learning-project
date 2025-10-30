@@ -22,6 +22,7 @@ AUTH_USER_MODEL = 'users.User'
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders.middleware.CorsMiddleware",
     "whitenoise.runserver_nostatic",
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "corsheaders",
     'rest_framework',
     'drf_yasg',
     'djoser',
@@ -70,7 +72,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'phi_mart.wsgi.app'
-
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -170,6 +174,9 @@ SIMPLE_JWT = {
    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
 }
 DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS':{
         'user_create' :'users.serializers.UserCreateSerializer',
         'current_user':'users.serializers.UserSerializer'
@@ -187,3 +194,10 @@ SWAGGER_SETTINGS = {
       }
    }
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
