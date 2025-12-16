@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
+#Role Diyeu Check kora jabe
 from users.manager import CustomUserManager
 class User(AbstractUser):
     username = None
