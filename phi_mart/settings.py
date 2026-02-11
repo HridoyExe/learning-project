@@ -177,5 +177,5 @@ SWAGGER_SETTINGS = {
 }
 
 # Frontend / Backend
-FRONTEND_URL = config("FRONTEND_URL")
-BACKEND_URL = config("BACKEND_URL")
+FRONTEND_URL = config("FRONTEND_URL", default="http://localhost:5173")
+BACKEND_URL = config("BACKEND_URL", default="http://localhost:8000")
