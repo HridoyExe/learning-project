@@ -101,9 +101,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Cloudinary config
 cloudinary.config(
-    cloud_name=config("CLOUD_NAME"),
-    api_key=config("CLOUDINARY_API"),
-    api_secret=config("CLOUDINARY_SECRET"),
+    cloud_name=config("CLOUD_NAME", default=""),
+    api_key=config("CLOUDINARY_API", default=""),
+    api_secret=config("CLOUDINARY_SECRET", default=""),
     secure=True,
 )
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
@@ -139,8 +139,8 @@ SIMPLE_JWT = {
 
 # Djoser
 DJOSER = {
-    "EMAIL_FRONTEND_PROTOCOL": config("FRONTEND_PROTOCOL"),  # http / https
-    "EMAIL_FRONTEND_DOMAIN": config("FRONTEND_DOMAIN"),       # tmr frontend domain
+    "EMAIL_FRONTEND_PROTOCOL": config("FRONTEND_PROTOCOL", default="https"),
+    "EMAIL_FRONTEND_DOMAIN": config("FRONTEND_DOMAIN", default="localhost:5173"),
     "EMAIL_FRONTEND_SITE_NAME": "Phimart",
     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
     "ACTIVATION_URL": "activate/{uid}/{token}",
@@ -153,11 +153,11 @@ DJOSER = {
 
 
 # Email
-EMAIL_HOST = config("EMAIL_HOST")
-EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool)
-EMAIL_PORT = config("EMAIL_PORT", cast=int)
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool, default=True)
+EMAIL_PORT = config("EMAIL_PORT", cast=int, default=587)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
