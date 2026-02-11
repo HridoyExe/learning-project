@@ -1,4 +1,9 @@
 __pycache__/
-token.json
-.phi_env
+*.pyc
 .env
+.phi_env
+db.sqlite3
+staticfiles/
+media/
+token.json
+.vercel

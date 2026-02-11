@@ -8,7 +8,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security
 SECRET_KEY = config("SECRET_KEY", default="django-insecure-fallback-key-for-deployment")
 DEBUG = config("DEBUG", cast=bool, default=True)
-ALLOWED_HOSTS = [".vercel.app", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["*"]
+# Note: For strict security, you should list your specific domains here.
+# ALLOWED_HOSTS = [".vercel.app", "127.0.0.1", "localhost"]
 
 # Custom User Model
 AUTH_USER_MODEL = "users.User"
@@ -30,13 +32,11 @@ INSTALLED_APPS = [
     "users",
     "product",
     "order",
-    "debug_toolbar",
     "django_filters",
 ]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -46,6 +46,13 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+INSTALLED_APPS += ["cloudinary_storage", "cloudinary"]
+
+if DEBUG:
+    INSTALLED_APPS += ["debug_toolbar"]
+    # Usually DebugToolbarMiddleware should be high in the list
+    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
 ROOT_URLCONF = "phi_mart.urls"
 
@@ -67,8 +74,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "phi_mart.wsgi.application"
 
 CORS_ALLOWED_ORIGINS = [
-    config("FRONTEND_URL"),
-    "https://learning-project-5618.vercel.app",
+    config("FRONTEND_URL", default="http://localhost:5173"),
 ]
 
 # Database
