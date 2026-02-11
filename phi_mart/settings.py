@@ -14,9 +14,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-go#a&-x^4iy0#(jksb2(yh&(p!!b(s7)l+n3^5m6cxl#r6=qwz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [".vercel.app",'127.0.0.1']
+ALLOWED_HOSTS = [".vercel.app", '127.0.0.1', 'localhost']
 AUTH_USER_MODEL = 'users.User'
 
 # Application definition
@@ -181,7 +181,7 @@ DJOSER = {
     "EMAIL_FRONTEND_SITE_NAME" : "Phimart",
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_ACTIVATION_EMAIL': False,
     'SERIALIZERS':{
         'user_create' :'users.serializers.UserCreateSerializer',
         'current_user':'users.serializers.UserSerializer'
@@ -200,7 +200,10 @@ SWAGGER_SETTINGS = {
    }
 }
 
-EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST=config('EMAIL_HOST')
 EMAIL_USE_TLS=config('EMAIL_USE_TLS', cast=bool)
 EMAIL_PORT=config('EMAIL_PORT')
