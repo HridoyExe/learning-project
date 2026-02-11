@@ -1,13 +1,18 @@
 from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
-from djoser.serializers import UserSerializer as BaseUserSerializer
+from users.models import User
 
 class UserCreateSerializer(BaseUserCreateSerializer):
     class Meta(BaseUserCreateSerializer.Meta):
-        fields =['id','email','password','first_name','last_name','address','phone_number']
+        model = User
+        fields = ['id', 'email', 'password', 'first_name', 'last_name', 'address', 'phone_number']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
-class UserSerializer(BaseUserSerializer):
-  
-    class Meta(BaseUserSerializer.Meta):
-        ref_name = 'CustomUser'
-        fields =['id','email','first_name','last_name','address','phone_number','is_staff']
-        read_only_fields=['is_staff']
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        user = super().create(validated_data)
+        if password:
+            user.set_password(password)
+            user.save()
+        return user

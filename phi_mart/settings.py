@@ -133,17 +133,18 @@ SIMPLE_JWT = {
 
 # Djoser
 DJOSER = {
-    "EMAIL_FRONTEND_PROTOCOL": config("FRONTEND_PROTOCOL"),
-    "EMAIL_FRONTEND_DOMAIN": config("FRONTEND_DOMAIN"),
+    "EMAIL_FRONTEND_PROTOCOL": config("FRONTEND_PROTOCOL"),  # http / https
+    "EMAIL_FRONTEND_DOMAIN": config("FRONTEND_DOMAIN"),       # tmr frontend domain
     "EMAIL_FRONTEND_SITE_NAME": "Phimart",
     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True,
     "SERIALIZERS": {
-        "user_create": "users.serializers.UserCreateSerializer",
-        "current_user": "users.serializers.UserSerializer",
+        "user_create": "users.serializers.UserCreateSerializer",  
+        "current_user": "users.serializers.UserSerializer",       
     },
 }
+
 
 # Email
 EMAIL_HOST = config("EMAIL_HOST")
