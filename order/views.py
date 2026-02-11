@@ -28,7 +28,7 @@ class CartViewSet(CreateModelMixin,RetrieveModelMixin, DestroyModelMixin,Generic
         serializer.save(user=self.request.user)
 
     def get_queryset(self):
-        if getattr(self, 'swagger_fake_view',False):
+        if getattr(self, 'swagger_fake_view', False) or self.request is None:
             return Cart.objects.none()
         return Cart.objects.prefetch_related('items__product').filter(user=self.request.user) 
     
@@ -63,7 +63,7 @@ class CartItemViewSet(ModelViewSet):
     
     
 class OrderViewSet(ModelViewSet):
-    http_method_names = ['get','post','delete','patch','head','opotions']
+    http_method_names = ['get','post','delete','patch','head','options']
 
     @action(detail=True, methods=['post'])
     def cancel(self, request, pk=None):
@@ -98,9 +98,11 @@ class OrderViewSet(ModelViewSet):
         return OrderSerializer
 
     def get_serializer_context(self):
-        if getattr(self, 'swagger_fake_view',False):
+        if getattr(self, 'swagger_fake_view', False) or self.request is None:
             return super().get_serializer_context()
-        return {'user_id' : self.request.user.id, 'user':self.request.user}
+        
+        user_id = self.request.user.id if self.request.user and not self.request.user.is_anonymous else None
+        return {'request': self.request, 'user_id': user_id, 'user': self.request.user}
 
 
 
