@@ -64,7 +64,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "phi_mart.wsgi.application"
+WSGI_APPLICATION = "phi_mart.wsgi.app"
 
 CORS_ALLOWED_ORIGINS = [
     config("FRONTEND_URL"),
