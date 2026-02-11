@@ -6,8 +6,8 @@ import cloudinary
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security
-SECRET_KEY = config("SECRET_KEY")
-DEBUG = config("DEBUG", cast=bool, default=False)
+SECRET_KEY = config("SECRET_KEY", default="django-insecure-fallback-key-for-deployment")
+DEBUG = config("DEBUG", cast=bool, default=True)
 ALLOWED_HOSTS = [".vercel.app", "127.0.0.1", "localhost"]
 
 # Custom User Model
