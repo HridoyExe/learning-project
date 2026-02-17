@@ -2,6 +2,7 @@ from decouple import config
 from pathlib import Path
 from datetime import timedelta
 import cloudinary
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -9,8 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY", default="django-insecure-fallback-key-for-deployment")
 DEBUG = config("DEBUG", cast=bool, default=True)
 ALLOWED_HOSTS = ["*"]
-# Note: For strict security, you should list your specific domains here.
-# ALLOWED_HOSTS = [".vercel.app", "127.0.0.1", "localhost"]
+CSRF_TRUSTED_ORIGINS = ["https://*.railway.app", "https://*.up.railway.app", config("FRONTEND_URL", default="http://localhost:5173")]
 
 # Custom User Model
 AUTH_USER_MODEL = "users.User"
@@ -51,7 +51,6 @@ INSTALLED_APPS += ["cloudinary_storage", "cloudinary"]
 
 if DEBUG:
     INSTALLED_APPS += ["debug_toolbar"]
-    # Usually DebugToolbarMiddleware should be high in the list
     MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
 ROOT_URLCONF = "phi_mart.urls"
@@ -79,14 +78,11 @@ CORS_ALLOWED_ORIGINS = [
 
 # Database
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME", default="postgres"),
-        "USER": config("DB_USER", default="postgres"),
-        "PASSWORD": config("DB_PASSWORD", default=""),
-        "HOST": config("DB_HOST", default="localhost"),
-        "PORT": config("DB_PORT", cast=int, default=5432),
-    }
+    "default": dj_database_url.config(
+        default=f"postgres://{config('DB_USER', default='postgres')}:{config('DB_PASSWORD', default='')}@{config('DB_HOST', default='localhost')}:{config('DB_PORT', default=5432)}/{config('DB_NAME', default='postgres')}",
+        conn_max_age=600,
+        ssl_require=True,
+    )
 }
 
 INTERNAL_IPS = ["127.0.0.1"]
@@ -150,7 +146,6 @@ DJOSER = {
         "current_user": "users.serializers.UserSerializer",       
     },
 }
-
 
 # Email
 EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com")
