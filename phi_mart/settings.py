@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY", default="django-insecure-fallback-key-for-deployment")
 DEBUG = config("DEBUG", cast=bool, default=True)
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ["https://*.railway.app", "https://*.up.railway.app", config("FRONTEND_URL", default="http://localhost:5173")]
+CSRF_TRUSTED_ORIGINS = ["https://*.vercel.app", "https://*.now.sh", config("FRONTEND_URL", default="http://localhost:5173")]
 
 # Custom User Model
 AUTH_USER_MODEL = "users.User"
